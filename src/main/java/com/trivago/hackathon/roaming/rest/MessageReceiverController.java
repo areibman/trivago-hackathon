@@ -94,7 +94,7 @@ public class MessageReceiverController {
     }
 
     private String helloMessage() throws TwiMLException {
-        return buildMessage("Hello from Trivago!\nUse \"search [query]\" find hotels");
+        return buildMessage("Hello from Trivago!\nUse \"search [query]\" find hotels.\n \"info [#]\" for more info.\n\"Book [#]\" to Book!");
     }
 
     String buildMessage(String message) throws TwiMLException {
