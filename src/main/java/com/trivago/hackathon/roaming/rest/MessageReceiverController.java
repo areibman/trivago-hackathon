@@ -38,19 +38,19 @@ public class MessageReceiverController {
 
         System.out.println(from + ":"+body+":"+fromZip);
 
-        if (body.contains("trivago")) {
+        if (body.toLowerCase().contains("trivago")) {
             return helloMessage();
-        } else if (body.startsWith("search ")) {
+        } else if (body.toLowerCase().startsWith("search ")) {
             List<SearchResult> results = browser.getSearchResults(getStringAfterSpace(body));
             resultsCache.put(from, results);
             return listResults(results);
-        } else if (body.startsWith("info ")) {
+        } else if (body.toLowerCase().startsWith("info ")) {
             if (!resultsCache.containsKey(from)) {
                 return invalid();
             } else {
                 return moreInfo(from, getStringAfterSpace(from));
             }
-        } else if (body.startsWith("book ")) {
+        } else if (body.toLowerCase().startsWith("book ")) {
             if (!resultsCache.containsKey(from)) {
                 return invalid();
             } else {
@@ -63,7 +63,6 @@ public class MessageReceiverController {
     }
 
     private String getStringAfterSpace(String body) {
-        String space = body.substring(0, body.indexOf(' '));
         String content = body.substring(body.indexOf(' ') + 1);
         return content;
     }
@@ -76,7 +75,7 @@ public class MessageReceiverController {
         } else {
             browser.clickLink(results.get(intIndex));
             resultsCache.remove(from);
-            return buildMessage("booked!");
+            return buildMessage("Great you're booked!");
         }
     }
 
@@ -91,11 +90,11 @@ public class MessageReceiverController {
     }
 
     private String invalid() throws TwiMLException {
-        return buildMessage("Invalid option, try again");
+        return buildMessage("Invalid option\nPlease try again");
     }
 
     private String helloMessage() throws TwiMLException {
-        return buildMessage("Hello from Trivago! Use \"search [query]\" find hotels");
+        return buildMessage("Hello from Trivago!\nUse \"search [query]\" find hotels");
     }
 
     String buildMessage(String message) throws TwiMLException {

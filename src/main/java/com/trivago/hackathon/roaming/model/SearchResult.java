@@ -4,6 +4,7 @@ public class SearchResult {
 
     String name;
     String location;
+    String stars;
     String rating;
     String ratingText;
     String provider;
@@ -11,9 +12,10 @@ public class SearchResult {
     String minPrice;
     String linkElementId;
 
-    public SearchResult(String name, String location, String rating, String ratingText, String provider, String maxPrice, String minPrice, String linkElementId) {
+    public SearchResult(String name, String location, String stars, String rating, String ratingText, String provider, String maxPrice, String minPrice, String linkElementId) {
         this.name = name;
         this.location = location;
+        this.stars = stars;
         this.rating = rating;
         this.ratingText = ratingText;
         this.provider = provider;
@@ -28,6 +30,10 @@ public class SearchResult {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getStars() {
+        return stars;
     }
 
     public String getRating() {
