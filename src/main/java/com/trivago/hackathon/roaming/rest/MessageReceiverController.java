@@ -21,9 +21,11 @@ public class MessageReceiverController {
 
     }
     @RequestMapping(method = RequestMethod.POST, produces={"application/xml"})
-    String receive (@RequestBody String  msgbody) throws TwiMLException {
+    //String receive (@RequestBody String  msgbody) throws TwiMLException {
+    String receive (@RequestParam("From") String from, @RequestParam("Body") String body,
+                    @RequestParam("FromZip") String fromZip) throws TwiMLException {
 
-        System.out.println(msgbody);
+        System.out.println(from + ":"+body+":"+fromZip);
 
         MessagingResponse twiml;
         Message sms = new Message.Builder()
@@ -35,5 +37,6 @@ public class MessageReceiverController {
                     .build();
        return twiml.toXml();
     }
+
 
 }
