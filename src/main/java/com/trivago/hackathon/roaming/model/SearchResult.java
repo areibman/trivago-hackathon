@@ -9,8 +9,9 @@ public class SearchResult {
     String provider;
     String maxPrice;
     String minPrice;
+    String linkElementId;
 
-    public SearchResult(String name, String location, String rating, String ratingText, String provider, String maxPrice, String minPrice) {
+    public SearchResult(String name, String location, String rating, String ratingText, String provider, String maxPrice, String minPrice, String linkElementId) {
         this.name = name;
         this.location = location;
         this.rating = rating;
@@ -18,19 +19,7 @@ public class SearchResult {
         this.provider = provider;
         this.maxPrice = maxPrice;
         this.minPrice = minPrice;
-    }
-
-    @Override
-    public String toString() {
-        return "SearchResult{" +
-                "name='" + name + '\'' +
-                ", location='" + location + '\'' +
-                ", rating='" + rating + '\'' +
-                ", ratingText='" + ratingText + '\'' +
-                ", provider='" + provider + '\'' +
-                ", maxPrice='" + maxPrice + '\'' +
-                ", minPrice='" + minPrice + '\'' +
-                '}';
+        this.linkElementId = linkElementId;
     }
 
     public String getName() {
@@ -59,5 +48,9 @@ public class SearchResult {
 
     public String getMinPrice() {
         return minPrice;
+    }
+
+    public String getLinkElementId() {
+        return linkElementId;
     }
 }

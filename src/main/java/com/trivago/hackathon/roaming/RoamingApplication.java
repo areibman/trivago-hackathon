@@ -1,11 +1,14 @@
 package com.trivago.hackathon.roaming;
 
 import com.trivago.hackathon.roaming.automation.TrivagoBrowser;
+import com.trivago.hackathon.roaming.model.SearchResult;
 import com.trivago.hackathon.roaming.twilio.TwilioClient;
 import com.twilio.Twilio;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.List;
 
 @SpringBootApplication
 public class RoamingApplication implements CommandLineRunner {
@@ -17,15 +20,16 @@ public class RoamingApplication implements CommandLineRunner {
 		SpringApplication.run(RoamingApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
+	public void run2(String... args) throws Exception {
 		Twilio.init(ACCTSID, AUTHTKN);
 		//send a message
 		// TwilioClient.send("+14703497823", "+16177102946", "TestMessageTwilioClient");
 	}
 
-	public void run2(String... args) throws Exception {
+	public void run(String... args) throws Exception {
 		TrivagoBrowser browser = new TrivagoBrowser();
-		browser.getSearchResults("Las Vegas").forEach(x -> System.out.println(x));
+		List<SearchResult> results = browser.getSearchResults("Las Vegas");
+		results.forEach(x -> System.out.println(x));
+		browser.clickLink(results.get(3));
 	}
 }
