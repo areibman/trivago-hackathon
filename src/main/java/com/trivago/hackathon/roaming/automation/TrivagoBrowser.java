@@ -61,7 +61,7 @@ public class TrivagoBrowser {
         String minPrice = html.findElement(By.xpath(".//section/div/div/div/meta[2]")).getAttribute("content");
         String linkId = html.findElement(By.xpath(".//section[2]/div")).getAttribute("data-id");
 
-        return new SearchResult(title, location, rating, ratingText, provider, maxPrice, minPrice, linkId);
+        return new SearchResult(title, location, stars, rating, ratingText, provider, maxPrice, minPrice, linkId);
     };
 
     public void quit() {

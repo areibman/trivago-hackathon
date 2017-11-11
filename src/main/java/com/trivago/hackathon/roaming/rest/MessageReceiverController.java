@@ -1,8 +1,5 @@
 package com.trivago.hackathon.roaming.rest;
 
-/**
- * Created by khadka on 11/11/17.
- */
 import com.trivago.hackathon.roaming.automation.TrivagoBrowser;
 import com.trivago.hackathon.roaming.model.SearchResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,23 +35,23 @@ public class MessageReceiverController {
 
         System.out.println(from + ":"+body+":"+fromZip);
 
-        if (body.contains("trivago")) {
+        if (body.toLowerCase().contains("trivago")) {
             return helloMessage();
-        } else if (body.startsWith("search ")) {
-            List<SearchResult> results = browser.getSearchResults(body.split(" ")[1]);
+        } else if (body.toLowerCase().startsWith("search ")) {
+            List<SearchResult> results = browser.getSearchResults(getStringAfterSpace(body));
             resultsCache.put(from, results);
             return listResults(results);
-        } else if (body.startsWith("info ")) {
+        } else if (body.toLowerCase().startsWith("info ")) {
             if (!resultsCache.containsKey(from)) {
                 return invalid();
             } else {
-                return moreInfo(body.split(" ")[1]);
+                return moreInfo(from, getStringAfterSpace(from));
             }
-        } else if (body.startsWith("book ")) {
+        } else if (body.toLowerCase().startsWith("book ")) {
             if (!resultsCache.containsKey(from)) {
                 return invalid();
             } else {
-                return book(from, resultsCache.get(from).get(Integer.valueOf(body.split(" ")[1])));
+                return book(from, getStringAfterSpace(body));
             }
         }
         else {
@@ -62,15 +59,26 @@ public class MessageReceiverController {
         }
     }
 
-    private String book(String from, SearchResult result) throws TwiMLException {
-        browser.clickLink(result);
-        resultsCache.remove(from);
-        return buildMessage("booked!");
+    private String getStringAfterSpace(String body) {
+        String content = body.substring(body.indexOf(' ') + 1);
+        return content;
     }
 
-    private String moreInfo(String index) throws TwiMLException {
-        
-        return buildMessage("More info here");
+    private String book(String from, String index) throws TwiMLException {
+        Integer intIndex = Integer.valueOf(index);
+        List<SearchResult> results = resultsCache.get(from);
+        if ( results.get(intIndex) == null) {
+            return invalid();
+        } else {
+            browser.clickLink(results.get(intIndex));
+            resultsCache.remove(from);
+            return buildMessage("Great you're booked!");
+        }
+    }
+
+    private String moreInfo(String from, String index) throws TwiMLException {
+        SearchResult result = resultsCache.get(from).get(Integer.valueOf(index));
+        return buildMessage("Provider: " + result.getProvider());
     }
 
     private String listResults(List<SearchResult> results) throws TwiMLException {
@@ -84,11 +92,11 @@ public class MessageReceiverController {
     }
 
     private String invalid() throws TwiMLException {
-        return buildMessage("Invalid option, try again");
+        return buildMessage("Invalid option\nPlease try again");
     }
 
     private String helloMessage() throws TwiMLException {
-        return buildMessage("type search [query] find hotels");
+        return buildMessage("Hello from Trivago!\nUse \"search [query]\" find hotels.\n \"info [#]\" for more info.\n\"Book [#]\" to Book!");
     }
 
     String buildMessage(String message) throws TwiMLException {
