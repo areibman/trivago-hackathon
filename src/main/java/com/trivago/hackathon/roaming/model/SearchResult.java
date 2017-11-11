@@ -53,4 +53,20 @@ public class SearchResult {
     public String getLinkElementId() {
         return linkElementId;
     }
+
+    public String toStringVerbose(){
+        String returnStr = "Hotel Name: " + this.name + "\n"
+                + "Location: " + this.name + "\n"
+                + "Rating: " + this.rating + " (" + this.ratingText + ")\n"
+                + "Agency: " + this.provider + "\n"
+                + "Price: " + this.minPrice + " (regularly: " + this.maxPrice + ")\n";
+        return returnStr;
+    }
+
+    public String toStringConcise(){
+        String returnStr = "Hotel Name: " + this.name +
+                "\t" + "Location: " + this.name +
+                "\t" + "Price: " + this.minPrice + " (regularly: " + this.maxPrice + ")";
+        return returnStr;
+    }
 }

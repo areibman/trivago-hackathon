@@ -69,12 +69,18 @@ public class MessageReceiverController {
     }
 
     private String moreInfo(String index) throws TwiMLException {
+        
         return buildMessage("More info here");
     }
 
     private String listResults(List<SearchResult> results) throws TwiMLException {
-
-        return buildMessage("here are the results");
+        StringBuilder message = new StringBuilder("Your recommendations:\n");
+        int maxIndex = Math.max(results.size(), 5);
+        for(int i=0; i<maxIndex; i++) {
+            message.append(i+1).append(".").append(results.get(i).toStringConcise()).append("\n");
+        }
+        message.append("Enter 'info [#]' for more details\n");
+        return buildMessage(message.toString());
     }
 
     private String invalid() throws TwiMLException {
