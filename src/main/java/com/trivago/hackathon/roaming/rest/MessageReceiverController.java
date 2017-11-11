@@ -83,7 +83,7 @@ public class MessageReceiverController {
 
     private String listResults(List<SearchResult> results) throws TwiMLException {
         StringBuilder message = new StringBuilder("Your recommendations:\n");
-        int maxIndex = Math.max(results.size(), 5);
+        int maxIndex = Math.max(results.    size(), 5);
         for(int i=0; i<maxIndex; i++) {
             message.append(i+1).append(". ").append(results.get(i).toStringConcise()).append("\n");
         }

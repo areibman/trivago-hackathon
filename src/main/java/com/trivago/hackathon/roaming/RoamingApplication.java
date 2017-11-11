@@ -33,9 +33,8 @@ public class RoamingApplication implements CommandLineRunner {
 
 	public void run(String... args) throws Exception {
 		TrivagoBrowser browser = new TrivagoBrowser();
-		List<SearchResult> results = browser.getSearchResults("Las Vegas");
+		List<SearchResult> results = browser.getSearchResults("Kathmandu");
 		results.forEach(x -> System.out.println(x));
 		browser.clickLink(results.get(3));
-		browser.getSearchResults("Las Vegas").forEach(x -> System.out.println(x));
 	}
 }
