@@ -85,7 +85,7 @@ public class MessageReceiverController {
         StringBuilder message = new StringBuilder("Your recommendations:\n");
         int maxIndex = Math.max(results.size(), 5);
         for(int i=0; i<maxIndex; i++) {
-            message.append(i+1).append(".").append(results.get(i).toStringConcise()).append("\n");
+            message.append(i+1).append(". ").append(results.get(i).toStringConcise()).append("\n");
         }
         message.append("Enter 'info [#]' for more details\n");
         return buildMessage(message.toString());
