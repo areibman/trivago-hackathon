@@ -28,17 +28,17 @@ public class TrivagoBrowser {
         WebElement element = driver.findElement(By.id("horus-querytext"));
         element.sendKeys(query);
         element.submit();
-
+/*
         new WebDriverWait(driver, 10).until(
                 (Predicate<WebDriver>) webDriver -> ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete"));
-
+*/
         try {
-            Thread.sleep(5);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        WebElement body = driver.findElement(By.tagName("body"));
-        body.sendKeys(Keys.ESCAPE);
+       // WebElement body = driver.findElement(By.tagName("body"));
+       // body.sendKeys(Keys.ESCAPE);
 
 //        JavascriptExecutor js = ((JavascriptExecutor) driver);
 //        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");

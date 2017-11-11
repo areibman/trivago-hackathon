@@ -2,6 +2,8 @@ package com.trivago.hackathon.roaming.rest;
 
 import com.trivago.hackathon.roaming.automation.TrivagoBrowser;
 import com.trivago.hackathon.roaming.model.SearchResult;
+import com.twilio.exception.TwilioException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.twilio.twiml.Body;
@@ -31,35 +33,40 @@ public class MessageReceiverController {
     @RequestMapping(method = RequestMethod.POST, produces={"application/xml"})
     //String receive (@RequestBody String  msgbody) throws TwiMLException {
     String receive (@RequestParam("From") String from, @RequestParam("Body") String body,
-                    @RequestParam("FromZip") String fromZip) throws TwiMLException {
+                    @RequestParam("FromZip") String fromZip) {
 
         System.out.println(from + ":"+body+":"+fromZip);
 
-        if (body.toLowerCase().contains("trivago")) {
-            return helloMessage();
-        } else if (body.toLowerCase().startsWith("search ")) {
-            List<SearchResult> results = browser.getSearchResults(getStringAfterSpace(body));
-            for (SearchResult s: results){
-                System.out.println(s.toStringConcise());
-            }
-            resultsCache.put(from, results);
-            return listResults(results);
-        } else if (body.toLowerCase().startsWith("info ")) {
-            if (!resultsCache.containsKey(from)) {
-                return invalid();
+        try {
+            if (body.toLowerCase().contains("trivago")) {
+                return helloMessage();
+            } else if (body.toLowerCase().startsWith("search ")) {
+                List<SearchResult> results = browser.getSearchResults(getStringAfterSpace(body));
+                for (SearchResult s : results) {
+                    System.out.println(s.toStringConcise());
+                }
+                resultsCache.put(from, results);
+                return listResults(results);
+            } else if (body.toLowerCase().startsWith("info ")) {
+                if (!resultsCache.containsKey(from)) {
+                    return invalid();
+                } else {
+                    return moreInfo(from, getStringAfterSpace(from));
+                }
+            } else if (body.toLowerCase().startsWith("book ")) {
+                if (!resultsCache.containsKey(from)) {
+                    return invalid();
+                } else {
+                    return book(from, getStringAfterSpace(body));
+                }
             } else {
-                return moreInfo(from, getStringAfterSpace(from));
-            }
-        } else if (body.toLowerCase().startsWith("book ")) {
-            if (!resultsCache.containsKey(from)) {
                 return invalid();
-            } else {
-                return book(from, getStringAfterSpace(body));
             }
+        } catch (TwiMLException e1) {
+            e1.printStackTrace();
         }
-        else {
-            return invalid();
-        }
+
+        return new String("error");
     }
 
     private String getStringAfterSpace(String body) {
@@ -87,13 +94,16 @@ public class MessageReceiverController {
     private String listResults(List<SearchResult> results) throws TwiMLException {
         System.out.println(results.size());
         StringBuilder message = new StringBuilder("Your recommendations:\n");
-        int maxIndex = Math.min(results.size(), 5);
+        int maxIndex = Math.min(results.size(), 1);
         for(int i=0; i<maxIndex; i++) {
             message.append(i+1).append(". ").append(results.get(i).toStringConcise()).append("\n");
-            System.out.println(results.get(i).toStringConcise());
+           // System.out.println(results.get(i).toStringConcise());
         }
+        //System.out.println(message.toString());
         message.append("Enter 'info [#]' for more details\n");
-        return buildMessage(message.toString());
+        return buildMessage(StringUtils.abbreviate(message.toString(), 1599));
+        //return buildMessage("Hotel Name Hyatt Regency Kathmandu");
+
     }
 
     private String invalid() throws TwiMLException {
