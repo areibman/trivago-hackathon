@@ -5,5 +5,4 @@ package com.trivago.hackathon.roaming.messaging;
  */
 public class MessageRouting {
 
-    private Map<String, String>
 }
