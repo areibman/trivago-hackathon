@@ -39,6 +39,9 @@ public class MessageReceiverController {
             return helloMessage();
         } else if (body.toLowerCase().startsWith("search ")) {
             List<SearchResult> results = browser.getSearchResults(getStringAfterSpace(body));
+            for (SearchResult s: results){
+                System.out.println(s.toStringConcise());
+            }
             resultsCache.put(from, results);
             return listResults(results);
         } else if (body.toLowerCase().startsWith("info ")) {
@@ -82,10 +85,12 @@ public class MessageReceiverController {
     }
 
     private String listResults(List<SearchResult> results) throws TwiMLException {
+        System.out.println(results.size());
         StringBuilder message = new StringBuilder("Your recommendations:\n");
-        int maxIndex = Math.max(results.size(), 5);
+        int maxIndex = Math.min(results.size(), 5);
         for(int i=0; i<maxIndex; i++) {
             message.append(i+1).append(". ").append(results.get(i).toStringConcise()).append("\n");
+            System.out.println(results.get(i).toStringConcise());
         }
         message.append("Enter 'info [#]' for more details\n");
         return buildMessage(message.toString());
