@@ -69,7 +69,7 @@ public class MessageReceiverController {
     }
 
     private String moreInfo(String index) throws TwiMLException {
-        return buildMessage("More info here"):
+        return buildMessage("More info here");
     }
 
     private String listResults(List<SearchResult> results) throws TwiMLException {
