@@ -4,6 +4,9 @@ import com.trivago.hackathon.roaming.automation.TrivagoBrowser;
 import com.trivago.hackathon.roaming.model.SearchResult;
 import com.trivago.hackathon.roaming.twilio.TwilioClient;
 import com.twilio.Twilio;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +18,8 @@ public class RoamingApplication implements CommandLineRunner {
 
 	private static final String ACCTSID = "AC46310db91a77ed3b9bfb7ee89d8bbfd1";
 	private static final String AUTHTKN = "8e66bb2a8ef84c16e784273a401d239d";
+	public static final String ACCOUNT_SID = "AC46310db91a77ed3b9bfb7ee89d8bbfd1";
+	public static final String AUTH_TOKEN = "8e66bb2a8ef84c16e784273a401d239d";
 
 	public static void main(String[] args) {
 		SpringApplication.run(RoamingApplication.class, args);
@@ -31,5 +36,6 @@ public class RoamingApplication implements CommandLineRunner {
 		List<SearchResult> results = browser.getSearchResults("Las Vegas");
 		results.forEach(x -> System.out.println(x));
 		browser.clickLink(results.get(3));
+		browser.getSearchResults("Las Vegas").forEach(x -> System.out.println(x));
 	}
 }
